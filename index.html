@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -92,6 +93,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -168,8 +170,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .message.bot {
@@ -212,7 +221,8 @@
         /* Typing Indicator */
         .typing-indicator {
             display: flex;
-            gap: 5px;
+            align-items: center;
+            gap: 10px;
             padding: 14px 18px;
             background: white;
             border-radius: 20px;
@@ -221,21 +231,48 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
         }
 
-        .typing-indicator span {
+        .typing-label {
+            font-size: 13px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dots span {
             width: 8px;
             height: 8px;
-            background: #b0b0b0;
+            background: linear-gradient(135deg, #f6d365, #fda085);
             border-radius: 50%;
             animation: bounce 1.4s infinite ease-in-out;
         }
 
-        .typing-indicator span:nth-child(1) { animation-delay: 0s; }
-        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        .typing-dots span:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
 
         @keyframes bounce {
-            0%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-6px); }
+
+            0%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-8px);
+            }
         }
 
         /* Quick Questions */
@@ -330,6 +367,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="demo-container">
         <h1>🚀 Salary Guide Chatbot</h1>
@@ -339,8 +377,10 @@
     <div class="chat-widget">
         <!-- Chat Button -->
         <button class="chat-button" id="chatButton" onclick="toggleChat()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
             </svg>
             Salary Guide
         </button>
@@ -356,8 +396,10 @@
                     </div>
                 </div>
                 <button class="close-btn" onclick="toggleChat()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
@@ -365,7 +407,8 @@
             <div class="chat-messages" id="chatMessages">
                 <div class="message bot">
                     <div class="message-content">
-                        Hi! I'm the Uplers Salary Guide assistant. Ask me about tech salaries in India, hiring best practices, or the Indian startup ecosystem. How can I help?
+                        Hi! I'm the Uplers Salary Guide assistant. Ask me about tech salaries in India, hiring best
+                        practices, or the Indian startup ecosystem. How can I help?
                     </div>
                 </div>
             </div>
@@ -373,18 +416,25 @@
             <div class="quick-questions" id="quickQuestions">
                 <p>Quick questions:</p>
                 <div class="quick-btns">
-                    <button class="quick-btn" onclick="sendQuickQuestion('Full Stack Engineer salary')">Full Stack Engineer salary</button>
-                    <button class="quick-btn" onclick="sendQuickQuestion('AI/ML Engineer pay')">AI/ML Engineer pay</button>
-                    <button class="quick-btn" onclick="sendQuickQuestion('Interview process')">Interview process</button>
-                    <button class="quick-btn" onclick="sendQuickQuestion('Hiring blind spots')">Hiring blind spots</button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('Full Stack Engineer salary')">Full Stack
+                        Engineer salary</button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('AI/ML Engineer pay')">AI/ML Engineer
+                        pay</button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('Interview process')">Interview
+                        process</button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('Hiring blind spots')">Hiring blind
+                        spots</button>
                 </div>
             </div>
 
             <div class="chat-input-area">
-                <input type="text" class="chat-input" id="chatInput" placeholder="Ask about salaries, hiring..." onkeypress="handleKeyPress(event)">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Ask about salaries, hiring..."
+                    onkeypress="handleKeyPress(event)">
                 <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path
+                            d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
                     </svg>
                 </button>
             </div>
@@ -640,7 +690,7 @@
             isOpen = !isOpen;
             const chatWindow = document.getElementById('chatWindow');
             const chatButton = document.getElementById('chatButton');
-            
+
             if (isOpen) {
                 chatWindow.classList.add('open');
                 chatButton.style.display = 'none';
@@ -673,9 +723,12 @@
             typingDiv.className = 'message bot';
             typingDiv.innerHTML = `
                 <div class="typing-indicator">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                    <span class="typing-label">Typing</span>
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                 </div>
             `;
             messagesContainer.appendChild(typingDiv);
@@ -692,7 +745,7 @@
         function sendMessage() {
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
-            
+
             if (!message) return;
 
             addMessage(message, 'user');
@@ -701,12 +754,12 @@
 
             showTyping();
 
-            // Simulate response delay
+            // Simulate realistic response delay (1.5-2 seconds)
             setTimeout(() => {
                 hideTyping();
                 const { response } = generateResponse(message);
                 addMessage(response, 'bot');
-            }, 500 + Math.random() * 500);
+            }, 1500 + Math.random() * 500);
         }
 
         function sendQuickQuestion(question) {
@@ -721,9 +774,10 @@
         }
 
         // Enable/disable send button based on input
-        document.getElementById('chatInput').addEventListener('input', function() {
+        document.getElementById('chatInput').addEventListener('input', function () {
             document.getElementById('sendBtn').disabled = !this.value.trim();
         });
     </script>
 </body>
+
 </html>
