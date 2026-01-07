@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uplers Salary Guide Chatbot - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .demo-container {
+            text-align: center;
+            color: white;
+            max-width: 600px;
+        }
+
+        .demo-container h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #f6d365, #fda085);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .demo-container p {
+            color: #a0a0a0;
+            margin-bottom: 2rem;
+        }
+
+        /* Chat Widget Styles */
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .chat-button {
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d3748 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 14px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .chat-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .chat-window {
+            display: none;
+            width: 400px;
+            max-width: calc(100vw - 40px);
+            height: 600px;
+            max-height: calc(100vh - 40px);
+            background: white;
+            border-radius: 20px;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+            animation: slideUp 0.3s ease;
+        }
+
+        .chat-window.open {
+            display: flex;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header */
+        .chat-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d3748 100%);
+            color: white;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .chat-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #f6d365, #fda085);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            color: #1a1a2e;
+        }
+
+        .chat-title h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .chat-title p {
+            font-size: 12px;
+            color: #a0a0a0;
+            margin-top: 2px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #a0a0a0;
+            cursor: pointer;
+            padding: 8px;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: white;
+        }
+
+        /* Messages */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f7f8fa;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .message {
+            max-width: 85%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.bot {
+            align-self: flex-start;
+        }
+
+        .message.user {
+            align-self: flex-end;
+        }
+
+        .message-content {
+            padding: 14px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .message.bot .message-content {
+            background: white;
+            color: #333;
+            border-bottom-left-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d3748 100%);
+            color: white;
+            border-bottom-right-radius: 6px;
+        }
+
+        .message-content strong {
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .message.user .message-content strong {
+            color: #f6d365;
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 14px 18px;
+            background: white;
+            border-radius: 20px;
+            border-bottom-left-radius: 6px;
+            width: fit-content;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #b0b0b0;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(1) { animation-delay: 0s; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-6px); }
+        }
+
+        /* Quick Questions */
+        .quick-questions {
+            padding: 0 20px 15px;
+            background: #f7f8fa;
+        }
+
+        .quick-questions p {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .quick-btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .quick-btn {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 8px 14px;
+            font-size: 12px;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-btn:hover {
+            background: #f0f0f0;
+            border-color: #c0c0c0;
+        }
+
+        /* Input Area */
+        .chat-input-area {
+            padding: 16px 20px;
+            background: white;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 12px;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 1px solid #e0e0e0;
+            border-radius: 25px;
+            padding: 12px 20px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .chat-input:focus {
+            border-color: #1a1a2e;
+            box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.1);
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d3748 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .chat-window {
+                width: calc(100vw - 20px);
+                height: calc(100vh - 100px);
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🚀 Salary Guide Chatbot</h1>
+        <p>Click the chat button in the bottom right corner to test the chatbot!</p>
+    </div>
+
+    <div class="chat-widget">
+        <!-- Chat Button -->
+        <button class="chat-button" id="chatButton" onclick="toggleChat()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            </svg>
+            Salary Guide
+        </button>
+
+        <!-- Chat Window -->
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <div class="chat-header-left">
+                    <div class="chat-avatar">U</div>
+                    <div class="chat-title">
+                        <h3>Salary Guide Assistant</h3>
+                        <p>India 2026 Edition</p>
+                    </div>
+                </div>
+                <button class="close-btn" onclick="toggleChat()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <div class="message-content">
+                        Hi! I'm the Uplers Salary Guide assistant. Ask me about tech salaries in India, hiring best practices, or the Indian startup ecosystem. How can I help?
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-questions" id="quickQuestions">
+                <p>Quick questions:</p>
+                <div class="quick-btns">
+                    <button class="quick-btn" onclick="sendQuickQuestion('Full Stack Engineer salary')">Full Stack Engineer salary</button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('AI/ML Engineer pay')">AI/ML Engineer pay</button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('Interview process')">Interview process</button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('Hiring blind spots')">Hiring blind spots</button>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Ask about salaries, hiring..." onkeypress="handleKeyPress(event)">
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Knowledge base
+        const KNOWLEDGE_BASE = {
+            salaries: {
+                engineering: {
+                    "full stack engineer": { "3-5": "20-30 Lakhs", "5-8": "30-40 Lakhs", "8+": "40 Lakhs+" },
+                    "frontend engineer": { "3-5": "20-30 Lakhs", "5-8": "30-40 Lakhs", "8+": "40 Lakhs+" },
+                    "backend engineer": { "3-5": "20-30 Lakhs", "5-8": "30-40 Lakhs", "8+": "40 Lakhs+" },
+                    "data engineer": { "3-5": "20-30 Lakhs", "5-8": "30-35 Lakhs", "8+": "35 Lakhs+" },
+                    "cloud/devops engineer": { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" },
+                    "devops engineer": { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" },
+                    "mobile engineer": { "3-5": "20-30 Lakhs", "5-8": "30-40 Lakhs", "8+": "40 Lakhs+" },
+                    "flutter engineer": { "3-5": "20-30 Lakhs", "5-8": "30-40 Lakhs", "8+": "40 Lakhs+" },
+                    "react native engineer": { "3-5": "20-30 Lakhs", "5-8": "30-40 Lakhs", "8+": "40 Lakhs+" },
+                    "product engineer": { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" },
+                    "python engineer": { "3-5": "20-30 Lakhs", "5-8": "30-40 Lakhs", "8+": "40 Lakhs+" },
+                    "data scientist": { "3-5": "20-30 Lakhs", "5-8": "30-45 Lakhs", "8+": "45 Lakhs+" },
+                    "cybersecurity engineer": { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" },
+                    "platform engineer": { "3-5": "25-30 Lakhs", "5-8": "30-35 Lakhs", "8+": "35 Lakhs+" },
+                    "ml ops engineer": { "3-5": "25-35 Lakhs", "5-8": "35-45 Lakhs", "8+": "45 Lakhs+" },
+                    "mlops engineer": { "3-5": "25-35 Lakhs", "5-8": "35-45 Lakhs", "8+": "45 Lakhs+" },
+                    "solutions architect": { "3-5": "N/A", "5-8": "35-45 Lakhs", "8+": "45 Lakhs+" },
+                    "qa automation engineer": { "3-5": "15-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" },
+                    "qa engineer": { "3-5": "15-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" },
+                    "site reliability engineer": { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" },
+                    "sre": { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" },
+                    ".net engineer": { "3-5": "20-30 Lakhs", "5-8": "30-40 Lakhs", "8+": "40 Lakhs+" },
+                    "dotnet engineer": { "3-5": "20-30 Lakhs", "5-8": "30-40 Lakhs", "8+": "40 Lakhs+" }
+                },
+                productAndGTM: {
+                    "product manager": { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" },
+                    "product/ux designer": { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" },
+                    "ux designer": { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" },
+                    "ui designer": { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" },
+                    "growth marketer": { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" },
+                    "customer success": { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" }
+                },
+                aiml: {
+                    topTier: { "3-5": "30-35 Lakhs", "5-7": "35-60 Lakhs", "7+": "60 Lakhs+" },
+                    productCompany: { "3-5": "25-35 Lakhs", "5-7": "35-45 Lakhs", "7+": "45 Lakhs+" }
+                }
+            },
+            stats: {
+                gics: "1,000+",
+                gicEmployees: "745,000",
+                gicRevenue: "~$19B annually",
+                startupFailRate: "90% fail within 5 years, 25% in first year",
+                ecosystemGrowth: "16.8% (April 2024 to April 2025)",
+                totalStartups: "150,000+",
+                unicorns: "125 (valued at $1B+)",
+                startupProfessionals: "600,000+",
+                aimlFromPremiumInstitutes: "14,570",
+                topProfessionalsInProduct: "41,506",
+                topTierGraduates: "110,297",
+                maangExperience: "39,731",
+                midLevelTalentPool: "23.5% have 5-8 years experience",
+                uplersClients: "500+",
+                linkedinFollowers: "1 Million+"
+            },
+            topCities: ["Bengaluru", "Hyderabad", "Gurgaon"],
+            topRoles2025: ["AI/ML Engineer", "Fullstack Engineer", "Backend Engineer"],
+            topSectors2025: ["AI native", "FinTech", "HealthTech"],
+            interviewFramework: {
+                round1: { name: "Initial Screening", duration: "20-30 minutes", purpose: "Gauge basics of skill, mindset, culture, ambition" },
+                round2: { name: "Technical Assessment", duration: "2-4 hours", purpose: "Problem solving, coding, architecture, testing logic" },
+                round3: { name: "Cultural Round", duration: "45-60 minutes", purpose: "Product mindset, ownership, team-fit, scalability" },
+                round4: { name: "Final Discussion", duration: "20-30 minutes", purpose: "Role expectations, joining date, compensation, next steps" }
+            },
+            blindSpots: [
+                { name: "Elaborate interview process", issue: "6-round processes cause dropouts", solution: "Use lean 4-step process" },
+                { name: "Experience gap in screening", issue: "Junior recruiters create friction with senior candidates", solution: "Use senior recruiter or specialized hiring partner" },
+                { name: "Mismatched budget benchmarking", issue: "Benchmarking against average Indian salaries loses top talent", solution: "Benchmark against product companies" },
+                { name: "Talent background misalignment", issue: "Service background talent often can't deliver ownership in product roles", solution: "Focus on hiring from product background" },
+                { name: "Backouts", issue: "60-90 day notice periods and competitive market cause offer rejections", solution: "Target 30-day or immediate joiners, keep backups, stay connected during notice" }
+            ],
+            ecosystem: {
+                service: { purpose: "Deliver what client asks", mindset: "Execution", workModel: "Fixed scope, clear specs", growthDriver: "Billable hours", salaryExpectation: "Lower", culturalFit: "Low" },
+                product: { purpose: "Build what users need", mindset: "Ownership", workModel: "Iterative, feedback-driven", growthDriver: "Innovation, adoption", salaryExpectation: "Higher", culturalFit: "High" }
+            }
+        };
+
+        // Helper functions
+        function findSalary(role) {
+            const normalizedRole = role.toLowerCase().trim();
+            for (const [key, value] of Object.entries(KNOWLEDGE_BASE.salaries.engineering)) {
+                if (normalizedRole.includes(key) || key.includes(normalizedRole)) {
+                    return { role: key, salaries: value, category: "Engineering" };
+                }
+            }
+            for (const [key, value] of Object.entries(KNOWLEDGE_BASE.salaries.productAndGTM)) {
+                if (normalizedRole.includes(key) || key.includes(normalizedRole)) {
+                    return { role: key, salaries: value, category: "Product & GTM" };
+                }
+            }
+            return null;
+        }
+
+        function generateResponse(query) {
+            const q = query.toLowerCase();
+            let wasAnswered = true;
+            let response = "";
+            let category = "general";
+
+            if (q.match(/^(hi|hello|hey|hii|hiii)[\s!?]*$/)) {
+                response = "Hello! I'm the Uplers Salary Guide assistant. I can help you with:\n\n• Salary ranges for 20+ tech roles in India (2026)\n• India's hiring ecosystem insights\n• Interview framework recommendations\n• Common hiring blind spots\n• India startup statistics\n\nWhat would you like to know?";
+                category = "greeting";
+            }
+            else if (q.includes("ai") || q.includes("ml") || q.includes("machine learning") || q.includes("artificial intelligence")) {
+                category = "salary_aiml";
+                if (q.includes("iit") || q.includes("bits") || q.includes("iim") || q.includes("top tier") || q.includes("premium") || q.includes("pedigree")) {
+                    response = `**AI/ML Engineer Salaries (Top-tier Pedigree - IITs, BITS Pilani, IIMs):**\n\n• 3-5 years: ${KNOWLEDGE_BASE.salaries.aiml.topTier["3-5"]}\n• 5-7 years: ${KNOWLEDGE_BASE.salaries.aiml.topTier["5-7"]}\n• 7+ years: ${KNOWLEDGE_BASE.salaries.aiml.topTier["7+"]}\n\nThese are annual figures in INR.`;
+                } else {
+                    response = `**AI/ML Engineer Salaries:**\n\n**With Product Company/Startup Experience:**\n• 3-5 years: ${KNOWLEDGE_BASE.salaries.aiml.productCompany["3-5"]}\n• 5-7 years: ${KNOWLEDGE_BASE.salaries.aiml.productCompany["5-7"]}\n• 7+ years: ${KNOWLEDGE_BASE.salaries.aiml.productCompany["7+"]}\n\n**Top-tier Pedigree (IITs, BITS, IIMs):**\n• 3-5 years: ${KNOWLEDGE_BASE.salaries.aiml.topTier["3-5"]}\n• 5-7 years: ${KNOWLEDGE_BASE.salaries.aiml.topTier["5-7"]}\n• 7+ years: ${KNOWLEDGE_BASE.salaries.aiml.topTier["7+"]}\n\nBetween 2023-2025, AI/ML and Data Scientist hires through Uplers grew by 260%.`;
+                }
+            }
+            else if (q.includes("salary") || q.includes("pay") || q.includes("compensation") || q.includes("ctc") || q.includes("package") || q.includes("earn") || q.includes("lakhs") || q.includes("lakh")) {
+                category = "salary_query";
+                const roles = ["full stack", "fullstack", "frontend", "front end", "backend", "back end", "data engineer", "devops", "cloud", "mobile", "flutter", "react native", "product engineer", "python", "data scientist", "cybersecurity", "platform", "mlops", "ml ops", "solutions architect", "qa", "sre", "site reliability", ".net", "dotnet", "product manager", "ux", "ui", "designer", "growth", "marketer", "customer success"];
+                let found = false;
+                for (const role of roles) {
+                    if (q.includes(role)) {
+                        const result = findSalary(role);
+                        if (result) {
+                            response = `**${result.role.charAt(0).toUpperCase() + result.role.slice(1)} Salaries (${result.category}):**\n\n• 3-5 years: ${result.salaries["3-5"]}\n• 5-8 years: ${result.salaries["5-8"]}\n• 8+ years: ${result.salaries["8+"]}\n\nThese are annual figures in INR for product companies/startups in India (2026).`;
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    response = `I have salary data for 20+ roles in Indian startups and product companies (2026). Here are some highlights:\n\n**Engineering Roles (8+ years):**\n• Full Stack/Frontend/Backend: 40 Lakhs+\n• Data Scientist: 45 Lakhs+\n• ML Ops Engineer: 45 Lakhs+\n• Solutions Architect: 45 Lakhs+\n\n**Product & GTM (8+ years):**\n• Product Manager: 35 Lakhs+\n• UX Designer: 35 Lakhs+\n\nAsk me about a specific role for detailed breakdown by experience level.`;
+                }
+            }
+            else {
+                const roleKeywords = [
+                    { terms: ["full stack", "fullstack"], role: "full stack engineer" },
+                    { terms: ["frontend", "front end", "front-end"], role: "frontend engineer" },
+                    { terms: ["backend", "back end", "back-end"], role: "backend engineer" },
+                    { terms: ["data engineer"], role: "data engineer" },
+                    { terms: ["devops", "cloud engineer"], role: "cloud/devops engineer" },
+                    { terms: ["mobile", "flutter", "react native"], role: "mobile engineer" },
+                    { terms: ["python engineer", "python developer"], role: "python engineer" },
+                    { terms: ["data scientist"], role: "data scientist" },
+                    { terms: ["product manager", "pm role"], role: "product manager" },
+                    { terms: ["ux designer", "ui designer", "product designer"], role: "product/ux designer" },
+                    { terms: ["qa", "automation engineer", "test engineer"], role: "qa automation engineer" },
+                    { terms: ["sre", "site reliability"], role: "site reliability engineer" },
+                    { terms: [".net", "dotnet"], role: ".net engineer" },
+                    { terms: ["cybersecurity", "security engineer"], role: "cybersecurity engineer" },
+                    { terms: ["platform engineer"], role: "platform engineer" },
+                    { terms: ["mlops", "ml ops"], role: "ml ops engineer" },
+                    { terms: ["solutions architect"], role: "solutions architect" },
+                    { terms: ["growth marketer", "growth marketing"], role: "growth marketer" },
+                    { terms: ["customer success"], role: "customer success" }
+                ];
+
+                let roleFound = false;
+                for (const { terms, role } of roleKeywords) {
+                    if (terms.some(term => q.includes(term))) {
+                        const result = findSalary(role);
+                        if (result) {
+                            response = `**${result.role.charAt(0).toUpperCase() + result.role.slice(1)} Salaries:**\n\n• 3-5 years: ${result.salaries["3-5"]}\n• 5-8 years: ${result.salaries["5-8"]}\n• 8+ years: ${result.salaries["8+"]}\n\nThese are annual figures in INR for product companies/startups in India (2026).`;
+                            category = "salary_role";
+                            roleFound = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!roleFound) {
+                    if (q.includes("interview") || q.includes("hiring process") || q.includes("recruitment process")) {
+                        const fw = KNOWLEDGE_BASE.interviewFramework;
+                        response = `**Recommended 4-Step Interview Framework:**\n\n**Round 1: ${fw.round1.name}** (${fw.round1.duration})\n${fw.round1.purpose}\n\n**Round 2: ${fw.round2.name}** (${fw.round2.duration})\n${fw.round2.purpose}\n\n**Round 3: ${fw.round3.name}** (${fw.round3.duration})\n${fw.round3.purpose}\n\n**Round 4: ${fw.round4.name}** (${fw.round4.duration})\n${fw.round4.purpose}\n\n**Things to avoid:** Don't start with AI/technical assessments before human interaction. Avoid slow feedback loops and delayed offer rollouts.`;
+                        category = "interview";
+                    }
+                    else if (q.includes("blind spot") || q.includes("mistake") || q.includes("avoid") || q.includes("common error") || q.includes("hiring tip")) {
+                        response = "**5 Hiring Blind Spots That Can Cost You Top Talent:**\n\n";
+                        KNOWLEDGE_BASE.blindSpots.forEach((bs, i) => {
+                            response += `**${i + 1}. ${bs.name}**\nIssue: ${bs.issue}\nSolution: ${bs.solution}\n\n`;
+                        });
+                        response = response.trim();
+                        category = "blind_spots";
+                    }
+                    else if (q.includes("backout") || q.includes("notice period") || q.includes("drop") || q.includes("candidate not joining")) {
+                        response = `**Handling Backouts in Indian Hiring:**\n\nBackouts are common in India due to 60-90 day notice periods and a hyper-competitive job market. Long notice periods give candidates time to explore better offers.\n\n**Solutions:**\n• Target candidates with 30-day notice or immediate availability\n• Keep a backup candidate before finalizing offers\n• Stay connected with candidates throughout the notice period\n\nAs Aayush Gupta (Director of Marketing, Uplers) says: "Backouts aren't rare in India, they're expected. Planning for this upfront makes hiring far more predictable."`;
+                        category = "backouts";
+                    }
+                    else if (q.includes("service") || q.includes("product ecosystem") || q.includes("service ecosystem") || q.includes("product vs service") || q.includes("service vs product")) {
+                        const s = KNOWLEDGE_BASE.ecosystem.service;
+                        const p = KNOWLEDGE_BASE.ecosystem.product;
+                        response = `**India's Two Tech Ecosystems:**\n\n**Service Ecosystem** (traditional)\n• Purpose: ${s.purpose}\n• Mindset: ${s.mindset}\n• Work model: ${s.workModel}\n• Growth driver: ${s.growthDriver}\n• Salary expectation: ${s.salaryExpectation}\n• Cultural fit for startups: ${s.culturalFit}\n\n**Product Ecosystem** (growing)\n• Purpose: ${p.purpose}\n• Mindset: ${p.mindset}\n• Work model: ${p.workModel}\n• Growth driver: ${p.growthDriver}\n• Salary expectation: ${p.salaryExpectation}\n• Cultural fit for startups: ${p.culturalFit}\n\n**Key insight:** Startups should specifically target talent from product backgrounds. Service-background hires often deliver tasks but lack ownership and innovation mindset.`;
+                        category = "ecosystem";
+                    }
+                    else if (q.includes("gic") || q.includes("global innovation center") || q.includes("innovation center")) {
+                        response = `**Global Innovation Centers (GICs) in India:**\n\nGICs are when global companies build in India not just to deliver, but to innovate, create products, push R&D, and lead technology.\n\n**Key Stats:**\n• Total GICs: ${KNOWLEDGE_BASE.stats.gics}\n• Employees: ${KNOWLEDGE_BASE.stats.gicEmployees}\n• Annual revenue: ${KNOWLEDGE_BASE.stats.gicRevenue}\n\n**Top cities for GICs in 2026:** ${KNOWLEDGE_BASE.topCities.join(", ")}\n\nThis represents a product-company mindset embedded in India.`;
+                        category = "gic";
+                    }
+                    else if (q.includes("india") || q.includes("ecosystem") || q.includes("startup") || q.includes("stat") || q.includes("market") || q.includes("why hire")) {
+                        response = `**India's Startup Ecosystem (2026):**\n\n• Total startups: ${KNOWLEDGE_BASE.stats.totalStartups}\n• Unicorns: ${KNOWLEDGE_BASE.stats.unicorns}\n• Annual growth rate: ${KNOWLEDGE_BASE.stats.ecosystemGrowth}\n• GICs: ${KNOWLEDGE_BASE.stats.gics} employing ${KNOWLEDGE_BASE.stats.gicEmployees}\n• Professionals with startup experience: ${KNOWLEDGE_BASE.stats.startupProfessionals}\n• AI/ML engineers from premium institutes: ${KNOWLEDGE_BASE.stats.aimlFromPremiumInstitutes}\n• Professionals with MAANG experience: ${KNOWLEDGE_BASE.stats.maangExperience}\n\n**Top roles hired in 2025:** ${KNOWLEDGE_BASE.topRoles2025.join(", ")}\n**Top hiring sectors:** ${KNOWLEDGE_BASE.topSectors2025.join(", ")}\n\nMany global startups now treat India as a core engineering strategy, not just an offshore hub.`;
+                        category = "india_stats";
+                    }
+                    else if (q.includes("top role") || q.includes("most hired") || q.includes("in demand") || q.includes("trending role") || q.includes("hot role")) {
+                        response = `**Top 3 Most Hired Roles in 2025:**\n\n1. AI/ML Engineer\n2. Fullstack Engineer\n3. Backend Engineer\n\n**Top 3 Hiring Sectors:**\n1. AI native companies\n2. FinTech\n3. HealthTech\n\n**Top Cities for GICs in 2026:**\n1. Bengaluru\n2. Hyderabad\n3. Gurgaon`;
+                        category = "top_roles";
+                    }
+                    else if ((q.includes("iit") || q.includes("bits") || q.includes("iim") || q.includes("top tier") || q.includes("premium institute")) && !q.includes("ai") && !q.includes("ml")) {
+                        response = `**Top-tier Talent Pool in India:**\n\n• Graduates with top-tier pedigree: ${KNOWLEDGE_BASE.stats.topTierGraduates}\n• AI/ML Engineers from premium institutes: ${KNOWLEDGE_BASE.stats.aimlFromPremiumInstitutes}\n• Professionals with MAANG experience: ${KNOWLEDGE_BASE.stats.maangExperience}\n• Top professionals in product companies: ${KNOWLEDGE_BASE.stats.topProfessionalsInProduct}\n\nFor AI/ML roles from IITs, BITS Pilani, or IIMs, salaries range from 30-35 Lakhs (3-5 yrs) to 60 Lakhs+ (7+ yrs).`;
+                        category = "top_tier";
+                    }
+                    else if (q.includes("uplers") || q.includes("who are you") || q.includes("about you") || q.includes("your company")) {
+                        response = `**About Uplers:**\n\nUplers helps founders and companies hire product-first talent from India with realistic benchmarks and processes that respect both speed and candidates.\n\n**Key facts:**\n• ${KNOWLEDGE_BASE.stats.uplersClients} companies have hired through Uplers\n• ${KNOWLEDGE_BASE.stats.linkedinFollowers} LinkedIn followers\n• Clients include BrowserStack, GitLab, Airbnb, Tripadvisor, Zeals, and more\n\nIf you're building a serious engineering team, Uplers specializes in bridging the gap between global companies and India's product talent ecosystem.`;
+                        category = "about_uplers";
+                    }
+                    else if (q.includes("all role") || q.includes("list of role") || q.includes("what role") || q.includes("which role") || q.includes("available role")) {
+                        response = `**20 Roles Covered in This Salary Guide:**\n\n**Engineering:**\nFull Stack Engineer, Frontend Engineer, Backend Engineer, Data Engineer, Cloud/DevOps Engineer, Mobile Engineer (Flutter/React Native), Product Engineer, Python Engineer, Data Scientist, Cybersecurity Engineer, Platform Engineer, ML Ops Engineer, Solutions Architect, QA Automation Engineer, Site Reliability Engineer (SRE), .Net Engineer\n\n**Product & GTM:**\nProduct Manager, Product/UX Designer, Growth Marketer, Customer Success\n\n**AI/ML:**\nAI/ML Engineer (with separate ranges for top-tier pedigree vs product company experience)\n\nAsk about any specific role for salary details.`;
+                        category = "role_list";
+                    }
+                    else if (q.includes("help") || q.includes("what can you") || q.includes("what do you know") || q.includes("capabilities")) {
+                        response = "I can help you with information from the **Uplers India Salary Guide 2026**:\n\n• **Salary ranges** for 20+ tech roles by experience level\n• **AI/ML salaries** (top-tier pedigree vs product company experience)\n• **India's hiring ecosystem** - service vs product divide\n• **4-step interview framework** for tech hiring\n• **5 hiring blind spots** that cost you top talent\n• **India startup statistics** (GICs, unicorns, growth rate)\n• **Top roles and sectors** being hired in 2025-2026\n\nJust ask a question!";
+                        category = "help";
+                    }
+                    else {
+                        response = "I'm sorry, I don't have information about that topic in my current knowledge base. I'm specifically trained on the Uplers India Salary Guide 2026, which covers:\n\n• Salary ranges for tech roles in India\n• Hiring ecosystem insights (service vs product)\n• Interview frameworks and best practices\n• India startup statistics\n\nIf you have questions outside these areas, our team would be happy to help. Feel free to reach out to Uplers directly, and we'll get back to you!";
+                        wasAnswered = false;
+                        category = "unanswered";
+                    }
+                }
+            }
+
+            return { response, wasAnswered, category };
+        }
+
+        function formatMessage(text) {
+            return text
+                .split('\n')
+                .map(line => {
+                    return line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                })
+                .join('<br>');
+        }
+
+        // UI functions
+        let isOpen = false;
+        let messageCount = 1;
+
+        function toggleChat() {
+            isOpen = !isOpen;
+            const chatWindow = document.getElementById('chatWindow');
+            const chatButton = document.getElementById('chatButton');
+            
+            if (isOpen) {
+                chatWindow.classList.add('open');
+                chatButton.style.display = 'none';
+                document.getElementById('chatInput').focus();
+            } else {
+                chatWindow.classList.remove('open');
+                chatButton.style.display = 'flex';
+            }
+        }
+
+        function addMessage(text, type) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.innerHTML = `<div class="message-content">${formatMessage(text)}</div>`;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            messageCount++;
+
+            // Hide quick questions after first user message
+            if (messageCount > 2) {
+                document.getElementById('quickQuestions').style.display = 'none';
+            }
+        }
+
+        function showTyping() {
+            const messagesContainer = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typingIndicator';
+            typingDiv.className = 'message bot';
+            typingDiv.innerHTML = `
+                <div class="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            `;
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typingDiv = document.getElementById('typingIndicator');
+            if (typingDiv) {
+                typingDiv.remove();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            addMessage(message, 'user');
+            input.value = '';
+            document.getElementById('sendBtn').disabled = true;
+
+            showTyping();
+
+            // Simulate response delay
+            setTimeout(() => {
+                hideTyping();
+                const { response } = generateResponse(message);
+                addMessage(response, 'bot');
+            }, 500 + Math.random() * 500);
+        }
+
+        function sendQuickQuestion(question) {
+            document.getElementById('chatInput').value = question;
+            sendMessage();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Enable/disable send button based on input
+        document.getElementById('chatInput').addEventListener('input', function() {
+            document.getElementById('sendBtn').disabled = !this.value.trim();
+        });
+    </script>
+</body>
+</html>
