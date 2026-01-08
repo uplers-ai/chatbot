@@ -947,7 +947,7 @@
                 if (q.includes(role)) {
                     const result = findSalary(role);
                     if (result) {
-                        response = `**${result.role.charAt(0).toUpperCase() + result.role.slice(1)} Salaries (${result.category}):**\n\n• 3-5 years: ${result.salaries["3-5"]} ${salaryLabel}\n• 5-8 years: ${result.salaries["5-8"]} ${salaryLabel}\n• 8+ years: ${result.salaries["8+"]} ${label || salaryLabel}\n\nThese are for product companies/startups in India (2026).`;
+                        response = `**${result.role.charAt(0).toUpperCase() + result.role.slice(1)} Salaries (${result.category}):**\n\n• 3-5 years: ${result.salaries["3-5"]} ${salaryLabel}\n• 5-8 years: ${result.salaries["5-8"]} ${salaryLabel}\n• 8+ years: ${result.salaries["8+"]} ${salaryLabel}\n\nThese are for product companies/startups in India (2026).`;
                         return { response, wasAnswered };
                     }
                 }
