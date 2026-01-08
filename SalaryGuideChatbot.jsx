@@ -197,7 +197,7 @@ const generateResponse = (query, currency) => {
         category = "about_uplers"
       }
       else {
-        response = `I'm sorry, I don't have information about that topic in my current knowledge base. I'm specifically trained on the Uplers India Salary Guide 2026, which covers:\n\n• Salary ranges for top 20 engineering roles in India\n• Hiring ecosystem insights\n• Interview frameworks and best practices\n....and a lot more\n\nYou can download the salary guide here - <a href="${SALARY_GUIDE_LINK}" target="_blank" class="text-[#FFD93D] underline">${SALARY_GUIDE_LINK}</a>\n\nIf you have any other questions or feedback on what we can do better, our team would be happy to help.\n\n<a href="${MEETING_LINK}" target="_blank" class="text-[#FFD93D] underline">Book a call with us now</a>`
+        response = `I'm sorry, I don't have information about that topic in my current knowledge base. I'm specifically trained on the Uplers India Salary Guide 2026, which covers:\n\n• Salary ranges for top 20 engineering roles in India\n• Hiring ecosystem insights\n• Interview frameworks and best practices and a lot more\n\n - <a href="${SALARY_GUIDE_LINK}" target="_blank" class="text-[#FFD93D] underline">${SALARY_GUIDE_LINK}</a>\n\nIf you have any other questions or feedback on what we can do better, our team would be happy to help.\n\n<a href="${MEETING_LINK}" target="_blank" class="text-[#FFD93D] underline">Book a call with us now</a>`
         wasAnswered = false
         category = "unanswered"
       }
@@ -374,7 +374,7 @@ export default function SalaryGuideChatbot() {
   return (
     <div className="fixed bottom-4 right-4 z-50 font-sans">
       {!isOpen && (
-        <div className="bg-white rounded-full shadow-xl border border-gray-200 p-2 flex items-center gap-3 transition-all hover:translate-y-[-2px] hover:shadow-2xl hover:border-[#FFD93D] w-80">
+        <div className="bg-white rounded-full shadow-xl border border-gray-200 p-2 flex items-center gap-3 transition-all hover:translate-y-[-2px] hover:shadow-2xl hover:border-[#FFD93D] w-64">
           <div className="w-10 h-10 bg-[#1a1a1a] rounded-full flex items-center justify-center text-[#FFD93D] cursor-pointer" onClick={() => setIsOpen(true)}>
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
