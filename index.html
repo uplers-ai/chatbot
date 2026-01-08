@@ -859,6 +859,7 @@
 
     <script>
         const MEETING_LINK = "https://calendly.com/uplers/30min?back=1&month=2026-01";
+        const SALARY_GUIDE_LINK = "https://www.uplers.com/india-salary-guide-2026/?utm_source=hs_automation&utm_medium=email&utm_content=393967408";
         let selectedCurrency = null;
         let isOpen = false;
         let messageCount = 1;
@@ -910,6 +911,33 @@
             topTierGraduates: "110,297", maangExperience: "39,731", uplersClients: "500+"
         };
 
+        // Auto-detect currency based on timezone
+        function detectAndSetDefaultCurrency() {
+            try {
+                const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const isIndia = timeZone && (
+                    timeZone === 'Asia/Kolkata' || 
+                    timeZone === 'Asia/Calcutta' ||
+                    timeZone.includes('Kolkata') ||
+                    timeZone.includes('Calcutta')
+                );
+                
+                const detectedCurrency = isIndia ? 'INR' : 'USD';
+                console.log('Detected timezone:', timeZone, '→ Currency:', detectedCurrency);
+                
+                // Pre-select the detected currency button
+                document.querySelectorAll('.currency-btn').forEach(btn => {
+                    if (btn.textContent.includes(detectedCurrency)) {
+                        btn.classList.add('selected');
+                        btn.style.borderColor = '#FFD93D';
+                        btn.style.background = '#FFD93D';
+                    }
+                });
+            } catch (e) {
+                console.log('Timezone detection failed, user will select manually');
+            }
+        }
+
         function selectCurrency(currency) {
             selectedCurrency = currency;
             document.querySelectorAll('.currency-btn').forEach(btn => btn.classList.remove('selected'));
@@ -951,8 +979,8 @@
             let wasAnswered = true;
             const salaryLabel = getSalaryLabel();
 
-            if (q.match(/^(hi|hello|hey|hii|hiii)[\s!?]*$/)) {
-                response = `Hello! 👋 I'm showing salaries in **${selectedCurrency}** (${salaryLabel}). What would you like to know about tech salaries in India?`;
+            if (q.match(/^(hi|hello|hey|hii|hiii|good morning|good afternoon|good evening|greetings)[\s!?]*$/)) {
+                response = `Hi! 👋 I'm the Uplers' 2026 Salary Guide assistant. Ask me about engineering salaries in India, hiring best practices, or the Indian hiring ecosystem. How can I help?`;
             }
             else if (q.includes("ai") || q.includes("ml") || q.includes("machine learning") || q.includes("artificial intelligence")) {
                 const aiml = SALARIES.aiml;
@@ -1047,7 +1075,7 @@
                         response = `I can help with:\n\n• **Salary ranges** for 20+ tech roles (${selectedCurrency})\n• **AI/ML salaries** by pedigree\n• **Interview framework**\n• **Hiring blind spots**\n• **India startup stats**\n\nJust ask a question!`;
                     }
                     else {
-                        response = `I don't have information about that in my knowledge base. I'm trained on the **Uplers India Salary Guide 2026** covering:\n\n• Tech role salaries\n• Hiring ecosystem insights\n• Interview frameworks\n\nFor questions outside these areas, I'd recommend speaking with our team directly.\n\n👉 <a href="${MEETING_LINK}" target="_blank">**Schedule a 30-min call with Uplers**</a>`;
+                        response = `I'm sorry, I don't have information about that topic in my current knowledge base. I'm specifically trained on the Uplers India Salary Guide 2026, which covers:\n\n• Salary ranges for top 20 engineering roles in India\n• Hiring ecosystem insights\n• Interview frameworks and best practices\n....and a lot more\n\nYou can download the salary guide here - <a href="${SALARY_GUIDE_LINK}" target="_blank">Download Salary Guide</a>\n\nIf you have any other questions or feedback on what we can do better, our team would be happy to help.\n\n<a href="${MEETING_LINK}" target="_blank">Book a call with us now</a>`;
                         wasAnswered = false;
                     }
                 }
@@ -1067,6 +1095,8 @@
             if (isOpen) {
                 chatWindow.classList.add('open');
                 chatButton.style.display = 'none';
+                // Auto-detect and pre-select currency when chat opens
+                detectAndSetDefaultCurrency();
             } else {
                 chatWindow.classList.remove('open');
                 chatButton.style.display = 'flex';

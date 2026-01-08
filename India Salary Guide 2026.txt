@@ -1,0 +1,310 @@
+INDIA SALARY GUIDE 2026
+By Uplers
+For startups and tech companies hiring from India
+
+================================================================================
+TABLE OF CONTENTS
+================================================================================
+01. The Overlooked Divide in India's Hiring Ecosystem
+02. 5 Hiring Blind Spots That Can Cost You Top Talent
+03. India's Growing Role in the Startup Ecosystem
+04. Top 20 Engineering Roles and Expected Pay
+
+================================================================================
+SECTION 1: THE OVERLOOKED DIVIDE IN INDIA'S HIRING ECOSYSTEM
+================================================================================
+
+India has predominantly had a largely service industry background. For decades, 
+India has been the world's back office providing IT, development, and operational 
+services to global companies.
+
+This is no longer the case now. Two different ecosystems are at play:
+
+1. SERVICE ECOSYSTEM
+   - What India is historically known for
+   - Companies that build and maintain software for others
+   - Everything runs on fixed timelines, defined scope, and billable hours
+   - Success means delivery on time, not necessarily innovation
+
+2. PRODUCT ECOSYSTEM
+   - Relatively new but fast-growing
+   - Companies building their own products like SaaS, AI, fintech, developer tools
+   - Success depends on innovation, scale, and user adoption
+
+COMPARISON TABLE: SERVICE VS PRODUCT
+--------------------------------------------------------------------------------
+| Attribute              | Service                  | Product                   |
+|------------------------|--------------------------|---------------------------|
+| Purpose                | Deliver what client asks | Build what users need     |
+| Mindset                | Execution                | Ownership                 |
+| Work model             | Fixed scope, clear specs | Iterative, feedback-driven|
+| Growth driver          | Billable hours           | Innovation, adoption      |
+| Salary expectation     | Lower                    | Higher                    |
+| Cultural fit (startups)| Low                      | High                      |
+--------------------------------------------------------------------------------
+
+KEY INSIGHT: This difference is massive yet often overlooked by startups hiring 
+from India. Many assume "tech talent is tech talent." They interview engineers 
+from service companies, find them skilled and affordable, and think they've 
+found a great deal.
+
+This difference is uniquely Indian because outside India, people don't even 
+realize it exists. They assume hiring from India means hiring from one unified 
+tech talent pool. But in reality, you're hiring from two completely different worlds.
+
+================================================================================
+SECTION 2: 5 HIRING BLIND SPOTS THAT CAN COST YOU TOP TALENT
+================================================================================
+
+01. ELABORATE INTERVIEW PROCESS
+    Problem: A 6-round interview process is dragging. Chances of dropouts 
+    increase and timelines get delayed.
+    
+    Solution: A lean 4-step process that encompasses everything from technical 
+    skills to culture fit.
+
+02. EXPERIENCE GAP IN SCREENING
+    Problem: Senior candidates expect peer-level conversations at first touch. 
+    A junior recruiter creates friction and weakening candidate confidence.
+    
+    Solution: Use senior recruiter or leverage a hiring partner who specializes 
+    in product hiring for an unbiased evaluation.
+
+03. MISMATCHED BUDGET BENCHMARKING
+    Problem: If you're benchmarking product salaries against average Indian 
+    salaries (which are generally on the lower end), you are already losing 
+    top talent.
+    
+    Solution: Benchmark against product companies.
+
+04. TALENT BACKGROUND MISALIGNMENT
+    Problem: Hiring talent from service background for product company roles 
+    often backfires. They can deliver tasks but not ownership-execution without 
+    innovation. The result? Missed growth, slower progress, and cultural friction.
+    
+    Solution: Startups and product companies should specifically focus on hiring 
+    from product background.
+
+05. BACKOUTS
+    Problem: It's common for candidates to accept an offer and then not show up 
+    and it's largely because of long notice periods (60-90 days) and a 
+    hyper-competitive job market.
+    
+    Solutions:
+    - Target candidates with 30-day or immediate joiners
+    - Keep a backup before finalizing an offer
+    - Stay connected through the notice period to prevent drop-offs
+
+QUOTE: "Backouts aren't rare in India, they're expected. Long notice periods 
+give candidates time to explore better offers, and many switch to higher-paying 
+or faster-moving companies at the last moment. Planning for this upfront makes 
+hiring far more predictable."
+- Aayush Gupta, Director of Marketing, Uplers
+
+================================================================================
+4-STEP INTERVIEW FRAMEWORK
+================================================================================
+
+ROUND 1: INITIAL SCREENING (20-30 minutes)
+Also called: Intro Call, Exploratory call, Initial Interview
+Purpose: Use this as a human screening - gauge the basics of skill, mindset, 
+culture, ambition.
+
+ROUND 2: TECHNICAL ASSESSMENT (2-4 hours)
+Also called: DSA/coding assessment, Online Assessment (OA), Data Structures & 
+Algorithms Round (DSU Round), Technical Screen
+Purpose: Dive into real skills - problem solving, coding, architecture, testing 
+logic. You can explore external interview platforms as well.
+
+ROUND 3: CULTURAL ROUND (45-60 minutes)
+Also called: Behavioural Interview, Leadership Round, Tech Lead
+Purpose: After the candidate shows tech competency, this round assesses the 
+bigger picture - product mindset, ownership, team-fit, how they'll scale, how 
+they'll contribute beyond tasks.
+
+ROUND 4: FINAL DISCUSSION (20-30 minutes)
+Also called: Offer Call, Compensation Discussion, Closing Interview, Final Alignment
+Purpose: Closure round - check details, align on role expectations, joining date, 
+compensation, next steps. The candidate and you both should feel ready.
+
+THINGS TO AVOID DURING THIS PROCESS:
+- Don't start with a technical assessment/AI interview: Top professionals do not 
+  want to spend time proving their expertise before any human interaction.
+- Slow feedback loop: Immediately available talents are actively looking to switch. 
+  Your slow communication could cost you a good candidate.
+- Slow offer roll outs: Delayed offers and late confirmations create uncertainty 
+  for candidates. Momentum drops, counteroffers rise, and strong talent often 
+  walks away before Day 1.
+
+================================================================================
+SECTION 3: INDIA'S GROWING ROLE IN SHAPING THE GLOBAL STARTUP ECOSYSTEM
+================================================================================
+
+01. EXPANSION OF GLOBAL INNOVATION CENTERS (GICs)
+    Definition: When a global company builds in another location not just to 
+    deliver but to innovate, create products, push R&D, lead technology, own 
+    features, own stack. In many cases, a GIC is a product-company mindset 
+    embedded in India.
+    
+    STATS:
+    - India has over 1,000 GICs
+    - Employing 745,000 people
+    - Generating ~$19B annually
+
+02. EXITS, SECOND-TIME FOUNDERS & THE TALENT MATURITY LOOP
+    - Approximately 90% of Indian startups fail within five years
+    - 25% fail within the first year itself
+    
+    What this means: As more startups exit, many ex-founders become product 
+    owners, spreading strong startup fluency across the talent pool.
+    
+    For employers: You're hiring from a market where many engineers have 
+    experienced full product cycles - from ideation and MVP to growth, scale, 
+    and exit.
+
+03. THE RISE OF REMOTE-FIRST STARTUPS HIRING DIRECTLY FROM INDIA
+    The geography of hiring has changed: many global startups now treat India 
+    as a core part of their engineering strategy, not just an offshore hub.
+    
+    For employers: The Indian talent you're engaging is already conditioned to 
+    work in global product contexts, often fully remote or hybrid, and expecting 
+    full ownership.
+    
+    KEY STATS:
+    - Annual Ecosystem Growth Rate: 16.8% (April 2024 to April 2025)
+    - Startups in 2025: 150,000+
+    - Unicorns: 125 (Valued at $1B+)
+
+================================================================================
+SECTION 4: TOP 20 ENGINEERING ROLES IN STARTUPS IN 2026
+================================================================================
+
+Compensation ranges per month by experience level (in USD):
+
+ENGINEERING ROLES
+--------------------------------------------------------------------------------
+| Role                                | 3-5 years      | 5-8 years      | 8+ years   |
+|-------------------------------------|----------------|----------------|------------|
+| Full Stack Engineer                 | $2,000-$3,000  | $3,000-$4,000  | $4,000+    |
+| Frontend Engineer                   | $2,000-$3,000  | $3,000-$4,000  | $4,000+    |
+| Backend Engineer                    | $2,000-$3,000  | $3,000-$4,000  | $4,000+    |
+| Data Engineer                       | $2,000-$3,000  | $3,000-$3,500  | $3,500+    |
+| Cloud/DevOps Engineer               | $2,000-$2,500  | $2,500-$3,500  | $3,500+    |
+| Mobile Engineer (Flutter/React Native)| $2,000-$3,000| $3,000-$4,000  | $4,000+    |
+| Product Engineer                    | $2,000-$2,500  | $2,500-$3,500  | $3,500+    |
+| Python Engineer                     | $2,000-$3,000  | $3,000-$4,000  | $4,000+    |
+| Data Scientist                      | $2,000-$3,000  | $3,000-$4,500  | $4,500+    |
+| Cybersecurity Engineer              | $2,000-$2,500  | $2,500-$3,500  | $3,500+    |
+| Platform Engineer                   | $2,500-$3,000  | $3,000-$3,500  | $3,500+    |
+| ML Ops Engineer                     | $2,500-$3,500  | $3,500-$4,500  | $4,500+    |
+| Solutions Architect                 | NA             | $3,500-$4,500  | $4,500+    |
+| QA Automation Engineer              | $1,500-$2,500  | $2,500-$3,500  | $3,500+    |
+| Site Reliability Engineer (SRE)     | $2,000-$2,500  | $2,500-$3,500  | $3,500+    |
+| .Net Engineer                       | $2,000-$3,000  | $3,000-$4,000  | $4,000+    |
+--------------------------------------------------------------------------------
+
+PRODUCT & GTM ROLES
+--------------------------------------------------------------------------------
+| Role                                | 3-5 years      | 5-8 years      | 8+ years   |
+|-------------------------------------|----------------|----------------|------------|
+| Product Manager                     | $2,000-$2,500  | $2,500-$3,500  | $3,500+    |
+| Product/UX Designer                 | $2,000-$2,500  | $2,500-$3,500  | $3,500+    |
+| Growth Marketer                     | $2,000-$2,500  | $2,500-$3,500  | $3,500+    |
+| Customer Success                    | $2,000-$2,500  | $2,500-$3,500  | $3,500+    |
+--------------------------------------------------------------------------------
+
+================================================================================
+TOP-TIER PEDIGREE (IITs, BITS Pilani, IIMs)
+================================================================================
+
+AI/ML Engineer salary ranges per month:
+--------------------------------------------------------------------------------
+| Role           | 3-5 years      | 5-7 years      | 7+ years   |
+|----------------|----------------|----------------|------------|
+| AI/ML Engineer | $3,000-$3,500  | $3,500-$6,000  | $6,000+    |
+--------------------------------------------------------------------------------
+
+TALENT POOL STATISTICS:
+- 600K+ professionals with startup experience
+- 14,570 AI/ML Engineers from premium Indian institutes
+- 41,506 top professionals currently working in product companies
+- 110,297 graduates with top-tier pedigree
+- 39,731 professionals with MAANG experience
+- 23.5% of our talent pool has 5-8 years of experience
+
+================================================================================
+AI/ML ENGINEERS (Product Company/Startup Experience)
+================================================================================
+
+Average compensation per month:
+--------------------------------------------------------------------------------
+| Role           | 3-5 years      | 5-7 years      | 7+ years   |
+|----------------|----------------|----------------|------------|
+| AI/ML Engineer | $2,500-$3,500  | $3,500-$4,500  | $4,500+    |
+--------------------------------------------------------------------------------
+
+TOP 3 MOST HIRED ROLES IN 2025:
+1. AI/ML Engineer
+2. Fullstack Engineer
+3. Backend Engineer
+
+TOP 3 SECTORS THAT HIRED IN 2025:
+1. AI native
+2. FinTech
+3. HealthTech
+
+TOP 3 INDIAN CITIES TO SET UP GICs IN 2026:
+1. Bengaluru
+2. Hyderabad
+3. Gurgaon
+
+QUOTE: "Our own hiring data reflects this sharp rise in demand for advanced 
+engineering talent. Between 2023 and 2025, the number of AI/ML Engineers and 
+Data Scientists hired through Uplers grew by more than 260%."
+- Bhuvan Desai, Senior VP Product and Engineering, Uplers
+
+================================================================================
+KEY TAKEAWAYS FOR HIRING MANAGERS
+================================================================================
+
+India isn't a one-size-fits-all market. It's a layered, fast-evolving talent 
+ecosystem. The companies winning in 2026 will be the ones that know how to hire 
+from the right pool, at the right pace, for the right purpose.
+
+QUOTE: "In 2026, successful hiring will rely on more than just finding talent. 
+It will depend on building globally aligned teams that blend innovation, 
+adaptability, and ownership."
+- Jaymin Bhuptani, CEO, Uplers
+
+Most hiring mistakes in India don't come from intent they come from misreading 
+the market.
+
+================================================================================
+ABOUT UPLERS
+================================================================================
+
+Uplers exists to bridge that gap.
+
+We work with founders who want to hire from India properly product-first talent, 
+realistic benchmarks, and processes that respect both speed and candidates.
+
+If you're building a serious engineering team, we might be a good fit.
+
+CLIENTS: 500+ companies hire the best talent through Uplers
+- BrowserStack ($4B valued global testing startup)
+- GitLab ($8B publicly listed DevOps platform)
+- Airbnb (Largest home-sharing platform)
+- Tripadvisor (Global travel review platform)
+- anervea.ai (Early-stage AI biopharma startup)
+- Zenoti (AI-native product studio)
+- Zeals ($47M funded Japanese startup)
+- SpazeVision (Geospatial services startup)
+
+LinkedIn: 1 Million+ Followers
+Website: www.uplers.com
+
+"Now hire talents from India, with confidence."
+
+================================================================================
+END OF DOCUMENT
+================================================================================

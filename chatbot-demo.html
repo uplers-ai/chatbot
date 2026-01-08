@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uplers Salary Guide Chatbot - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .demo-container {
+            text-align: center;
+            color: white;
+            max-width: 600px;
+        }
+
+        .demo-container h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #FFD93D, #FFB800);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .demo-container p {
+            color: #a0a0a0;
+            margin-bottom: 2rem;
+        }
+
+        /* Chat Widget Styles */
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        /* Floating Search Bar */
+        .floating-search-wrapper {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 8px 10px;
+            transition: all 0.3s ease;
+            width: 300px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .floating-search-wrapper:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+            border-color: #FFD93D;
+        }
+
+        .floating-search-wrapper.hidden {
+            display: none;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .floating-icon {
+            width: 40px;
+            height: 40px;
+            background: #1a1a1a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFD93D;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .floating-input {
+            border: none;
+            background: transparent;
+            padding: 0 15px;
+            font-size: 14px;
+            flex: 1;
+            outline: none;
+            color: #1a1a1a;
+        }
+
+        .floating-input::placeholder {
+            color: #888;
+        }
+
+        .pulse-dot {
+            width: 10px;
+            height: 10px;
+            background: #FFD93D;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(255, 217, 61, 0.7);
+            }
+
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(255, 217, 61, 0);
+            }
+
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(255, 217, 61, 0);
+            }
+        }
+
+        .chat-window {
+            display: none;
+            width: 400px;
+            max-width: calc(100vw - 40px);
+            height: 600px;
+            max-height: calc(100vh - 40px);
+            background: white;
+            border-radius: 20px;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+            animation: slideUp 0.3s ease;
+        }
+
+        .chat-window.open {
+            display: flex;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header */
+        .chat-header {
+            background: #1a1a1a;
+            color: white;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            background: #FFD93D;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            color: #1a1a1a;
+        }
+
+        .chat-title h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .chat-title p {
+            font-size: 12px;
+            color: #a0a0a0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #a0a0a0;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .close-btn:hover {
+            color: white;
+        }
+
+        /* Currency Selector Interface */
+        .currency-selector-view {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+            background: #f8f9fa;
+        }
+
+        .currency-selector-view h3 {
+            margin-bottom: 8px;
+            font-size: 20px;
+            color: #1a1a1a;
+        }
+
+        .currency-selector-view p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 24px;
+        }
+
+        .currency-options {
+            display: flex;
+            gap: 16px;
+        }
+
+        .currency-btn {
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 16px;
+            padding: 20px;
+            width: 120px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .currency-btn:hover {
+            border-color: #FFD93D;
+            background: #fffef5;
+            transform: translateY(-2px);
+        }
+
+        .currency-btn .flag {
+            font-size: 30px;
+        }
+
+        .currency-btn .label {
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+
+        .currency-btn .subtext {
+            font-size: 10px;
+            color: #888;
+        }
+
+        /* Messages */
+        .chat-messages {
+            display: none;
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f7f8fa;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chat-messages.active {
+            display: flex;
+        }
+
+        .message {
+            max-width: 85%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.bot {
+            align-self: flex-start;
+        }
+
+        .message.user {
+            align-self: flex-end;
+        }
+
+        .message-content {
+            padding: 14px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .message.bot .message-content {
+            background: white;
+            color: #333;
+            border-bottom-left-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+        }
+
+        .message.user .message-content {
+            background: #1a1a1a;
+            color: white;
+            border-bottom-right-radius: 6px;
+        }
+
+        .message-content strong {
+            color: inherit;
+            font-weight: 700;
+        }
+
+        .message-content a {
+            color: #FFD93D;
+            text-decoration: underline;
+        }
+
+        /* Typing Indicator */
+        .typing-container {
+            align-self: flex-start;
+            background: white;
+            padding: 12px 16px;
+            border-radius: 20px;
+            border-bottom-left-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .typing-label {
+            font-size: 12px;
+            color: #888;
+            font-weight: 500;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dots span {
+            width: 6px;
+            height: 6px;
+            background: #FFD93D;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-6px);
+            }
+        }
+
+        /* Quick Questions */
+        .quick-questions {
+            display: none;
+            padding: 0 20px 15px;
+            background: #f7f8fa;
+        }
+
+        .quick-questions.active {
+            display: block;
+        }
+
+        .quick-questions p {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .quick-btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .quick-btn {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 8px 14px;
+            font-size: 12px;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-btn:hover {
+            background: #FFD93D;
+            border-color: #FFD93D;
+            color: #1a1a1a;
+        }
+
+        /* Input Area */
+        .chat-input-area {
+            display: none;
+            padding: 16px 20px;
+            background: white;
+            border-top: 1px solid #eee;
+            gap: 12px;
+        }
+
+        .chat-input-area.active {
+            display: flex;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 1px solid #e0e0e0;
+            border-radius: 25px;
+            padding: 12px 20px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .chat-input:focus {
+            border-color: #FFD93D;
+        }
+
+        .send-btn {
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-container">
+        <h1>🚀 Salary Guide Chatbot</h1>
+        <p>Testing the logic from <strong>SalaryGuideChatbot.jsx</strong> locally.</p>
+    </div>
+
+    <div class="chat-widget">
+        <!-- Floating Search Input -->
+        <div class="floating-search-wrapper" id="floatingSearch">
+            <div class="floating-icon" onclick="toggleChat()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+            <input type="text" class="floating-input" id="floatingInput" placeholder="Ask anything..."
+                onkeypress="handleFloatingEnter(event)">
+        </div>
+
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <div class="chat-header-left">
+                    <div class="chat-avatar">U</div>
+                    <div class="chat-title">
+                        <h3>Salary Guide Assistant</h3>
+                        <p>India 2026 Edition</p>
+                    </div>
+                </div>
+                <button class="close-btn" onclick="toggleChat()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Initial State: Just Search -->
+            <div class="chat-messages" id="chatMessages"></div>
+
+            <div class="quick-questions" id="quickQuestions">
+                <p>Popular questions:</p>
+                <div class="quick-btns">
+                    <button class="quick-btn" onclick="sendQuickQuestion('Full Stack Engineer salary')">Full Stack
+                        Engineer salary</button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('AI/ML Engineer pay')">AI/ML Engineer
+                        pay</button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('Interview process')">Interview
+                        process</button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('Hiring blind spots')">Hiring blind
+                        spots</button>
+                </div>
+            </div>
+
+            <div class="chat-input-area" id="inputArea">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Type your question..."
+                    onkeypress="handleKeyPress(event)">
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path
+                            d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const KNOWLEDGE_BASE = {
+            salaries: {
+                engineering: {
+                    "full stack engineer": { INR: { "3-5": "20-30 Lakhs", "5-8": "30-40 Lakhs", "8+": "40 Lakhs+" }, USD: { "3-5": "$2,000-$3,000", "5-8": "$3,000-$4,000", "8+": "$4,000+" } },
+                    "frontend engineer": { INR: { "3-5": "20-30 Lakhs", "5-8": "30-40 Lakhs", "8+": "40 Lakhs+" }, USD: { "3-5": "$2,000-$3,000", "5-8": "$3,000-$4,000", "8+": "$4,000+" } },
+                    "backend engineer": { INR: { "3-5": "20-30 Lakhs", "5-8": "30-40 Lakhs", "8+": "40 Lakhs+" }, USD: { "3-5": "$2,000-$3,000", "5-8": "$3,000-$4,000", "8+": "$4,000+" } },
+                    "data engineer": { INR: { "3-5": "20-30 Lakhs", "5-8": "30-35 Lakhs", "8+": "35 Lakhs+" }, USD: { "3-5": "$2,000-$3,000", "5-8": "$3,000-$3,500", "8+": "$3,500+" } },
+                    "cloud/devops engineer": { INR: { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" }, USD: { "3-5": "$2,000-$2,500", "5-8": "$2,500-$3,500", "8+": "$3,500+" } },
+                    "devops engineer": { INR: { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" }, USD: { "3-5": "$2,000-$2,500", "5-8": "$2,500-$3,500", "8+": "$3,500+" } },
+                    "mobile engineer": { INR: { "3-5": "20-30 Lakhs", "5-8": "30-40 Lakhs", "8+": "40 Lakhs+" }, USD: { "3-5": "$2,000-$3,000", "5-8": "$3,000-$4,000", "8+": "$4,000+" } },
+                    "flutter engineer": { INR: { "3-5": "20-30 Lakhs", "5-8": "30-40 Lakhs", "8+": "40 Lakhs+" }, USD: { "3-5": "$2,000-$3,000", "5-8": "$3,000-$4,000", "8+": "$4,000+" } },
+                    "react native engineer": { INR: { "3-5": "20-30 Lakhs", "5-8": "30-40 Lakhs", "8+": "40 Lakhs+" }, USD: { "3-5": "$2,000-$3,000", "5-8": "$3,000-$4,000", "8+": "$4,000+" } },
+                    "product engineer": { INR: { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" }, USD: { "3-5": "$2,000-$2,500", "5-8": "$2,500-$3,500", "8+": "$3,500+" } },
+                    "python engineer": { INR: { "3-5": "20-30 Lakhs", "5-8": "30-40 Lakhs", "8+": "40 Lakhs+" }, USD: { "3-5": "$2,000-$3,000", "5-8": "$3,000-$4,000", "8+": "$4,000+" } },
+                    "data scientist": { INR: { "3-5": "20-30 Lakhs", "5-8": "30-45 Lakhs", "8+": "45 Lakhs+" }, USD: { "3-5": "$2,000-$3,000", "5-8": "$3,000-$4,500", "8+": "$4,500+" } },
+                    "cybersecurity engineer": { INR: { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" }, USD: { "3-5": "$2,000-$2,500", "5-8": "$2,500-$3,500", "8+": "$3,500+" } },
+                    "platform engineer": { INR: { "3-5": "25-30 Lakhs", "5-8": "30-35 Lakhs", "8+": "35 Lakhs+" }, USD: { "3-5": "$2,500-$3,000", "5-8": "$3,000-$3,500", "8+": "$3,500+" } },
+                    "ml ops engineer": { INR: { "3-5": "25-35 Lakhs", "5-8": "35-45 Lakhs", "8+": "45 Lakhs+" }, USD: { "3-5": "$2,500-$3,500", "5-8": "$3,500-$4,500", "8+": "$4,500+" } },
+                    "mlops engineer": { INR: { "3-5": "25-35 Lakhs", "5-8": "35-45 Lakhs", "8+": "45 Lakhs+" }, USD: { "3-5": "$2,500-$3,500", "5-8": "$3,500-$4,500", "8+": "$4,500+" } },
+                    "solutions architect": { INR: { "3-5": "N/A", "5-8": "35-45 Lakhs", "8+": "45 Lakhs+" }, USD: { "3-5": "N/A", "5-8": "$3,500-$4,500", "8+": "$4,500+" } },
+                    "qa automation engineer": { INR: { "3-5": "15-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" }, USD: { "3-5": "$1,500-$2,500", "5-8": "$2,500-$3,500", "8+": "$3,500+" } },
+                    "qa engineer": { INR: { "3-5": "15-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" }, USD: { "3-5": "$1,500-$2,500", "5-8": "$2,500-$3,500", "8+": "$3,500+" } },
+                    "site reliability engineer": { INR: { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" }, USD: { "3-5": "$2,000-$2,500", "5-8": "$2,500-$3,500", "8+": "$3,500+" } },
+                    "sre": { INR: { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" }, USD: { "3-5": "$2,000-$2,500", "5-8": "$2,500-$3,500", "8+": "$3,500+" } },
+                    ".net engineer": { INR: { "3-5": "20-30 Lakhs", "5-8": "30-40 Lakhs", "8+": "40 Lakhs+" }, USD: { "3-5": "$2,000-$3,000", "5-8": "$3,000-$4,000", "8+": "$4,000+" } },
+                    "dotnet engineer": { INR: { "3-5": "20-30 Lakhs", "5-8": "30-40 Lakhs", "8+": "40 Lakhs+" }, USD: { "3-5": "$2,000-$3,000", "5-8": "$3,000-$4,000", "8+": "$4,000+" } }
+                },
+                productAndGTM: {
+                    "product manager": { INR: { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" }, USD: { "3-5": "$2,000-$2,500", "5-8": "$2,500-$3,500", "8+": "$3,500+" } },
+                    "product/ux designer": { INR: { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" }, USD: { "3-5": "$2,000-$2,500", "5-8": "$2,500-$3,500", "8+": "$3,500+" } },
+                    "ux designer": { INR: { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" }, USD: { "3-5": "$2,000-$2,500", "5-8": "$2,500-$3,500", "8+": "$3,500+" } },
+                    "ui designer": { INR: { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" }, USD: { "3-5": "$2,000-$2,500", "5-8": "$2,500-$3,500", "8+": "$3,500+" } },
+                    "growth marketer": { INR: { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" }, USD: { "3-5": "$2,000-$2,500", "5-8": "$2,500-$3,500", "8+": "$3,500+" } },
+                    "customer success": { INR: { "3-5": "20-25 Lakhs", "5-8": "25-35 Lakhs", "8+": "35 Lakhs+" }, USD: { "3-5": "$2,000-$2,500", "5-8": "$2,500-$3,500", "8+": "$3,500+" } }
+                },
+                aiml: {
+                    topTier: { INR: { "3-5": "30-35 Lakhs", "5-7": "35-60 Lakhs", "7+": "60 Lakhs+" }, USD: { "3-5": "$3,000-$3,500", "5-7": "$3,500-$6,000", "7+": "$6,000+" } },
+                    productCompany: { INR: { "3-5": "25-35 Lakhs", "5-7": "35-45 Lakhs", "7+": "45 Lakhs+" }, USD: { "3-5": "$2,500-$3,500", "5-7": "$3,500-$4,500", "7+": "$4,500+" } }
+                }
+            },
+            stats: {
+                gics: "1,000+", gicEmployees: "745,000", gicRevenue: "~$19B annually",
+                startupFailRate: "90% fail within 5 years, 25% in first year",
+                ecosystemGrowth: "16.8%", totalStartups: "150,000+", unicorns: "125",
+                startupProfessionals: "600,000+", aimlFromPremiumInstitutes: "14,570",
+                uplersClients: "500+", linkedinFollowers: "1 Million+"
+            }
+        };
+
+        const MEETING_LINK = "https://calendly.com/uplers/30min?back=1&month=2026-01";
+        const SALARY_GUIDE_LINK = "https://www.uplers.com/india-salary-guide-2026/?utm_source=hs_automation&utm_medium=email&utm_content=393967408";
+        let currentCurrency = null;
+        let isOpen = false;
+
+        // Auto-detect currency on load
+        function detectCurrency() {
+            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            // Check for Indian timezones (Asia/Kolkata, Asia/Calcutta)
+            const isIndia = timeZone && (
+                timeZone === 'Asia/Kolkata' || 
+                timeZone === 'Asia/Calcutta' ||
+                timeZone.includes('Kolkata') ||
+                timeZone.includes('Calcutta')
+            );
+            
+            if (isIndia) {
+                currentCurrency = 'INR';
+                console.log('Detected Indian timezone:', timeZone, '→ Currency: INR');
+            } else {
+                currentCurrency = 'USD';
+                console.log('Detected timezone:', timeZone, '→ Currency: USD');
+            }
+        }
+
+        detectCurrency();
+
+        function toggleChat() {
+            isOpen = !isOpen;
+            document.getElementById('chatWindow').classList.toggle('open', isOpen);
+
+            // Toggle visibility of floating search
+            const floatSearch = document.getElementById('floatingSearch');
+            if (isOpen) {
+                floatSearch.classList.add('hidden');
+                document.getElementById('chatInput').focus();
+
+                // Ensure UI is ready logic
+                document.getElementById('chatMessages').classList.add('active');
+                document.getElementById('inputArea').classList.add('active');
+                document.getElementById('quickQuestions').style.display = 'none'; // Hidden initially as requested "only show searchbar"
+            } else {
+                floatSearch.classList.remove('hidden');
+                // Clear chat if closing? Maybe not.
+            }
+        }
+
+        function handleFloatingEnter(e) {
+            if (e.key === 'Enter') {
+                const val = e.target.value.trim();
+                if (val) {
+                    toggleChat(); // Open chat
+                    // Pass value to inner logic
+                    document.getElementById('chatInput').value = val;
+                    sendMessage(); // Auto-send
+                    e.target.value = ''; // Clear floating input
+                }
+            }
+        }
+
+        // Removed selectCurrency function as it's no longer needed in UI
+
+        function findSalary(role, currency) {
+            const norm = role.toLowerCase().trim();
+            for (const [key, val] of Object.entries(KNOWLEDGE_BASE.salaries.engineering)) {
+                if (norm.includes(key) || key.includes(norm)) return { role: key, salaries: val[currency], category: "Engineering" };
+            }
+            for (const [key, val] of Object.entries(KNOWLEDGE_BASE.salaries.productAndGTM)) {
+                if (norm.includes(key) || key.includes(norm)) return { role: key, salaries: val[currency], category: "Product/GTM" };
+            }
+            // Check AIML
+            // ... (AIML logic was simplified in previous code, let's just stick to the engineering/product loops or add AIML if in object)
+            // The object structure in this file has 'aiml' separate. Adding check:
+            for (const [key, val] of Object.entries(KNOWLEDGE_BASE.salaries.aiml || {})) {
+                // AIML structure is different { topTier: ..., productCompany: ... }
+                // Let's simplified check for "ai" or "ml" generic if needed, but for now specific roles like "aiml engineer" might match engineering keys if added there.
+                // Actually in the KNOWLEDGE_BASE const defined in this file, 'aiml' has keys like 'topTier', 'productCompany'. 
+                // So "AI/ML Engineer" query logic needs to handle this specific case or we just map it.
+                // For now, let's trust the role Loop 1 & 2 for "data scientist" etc.
+            }
+
+            return null;
+        }
+
+        function generateResponse(query, currency) {
+            const q = query.toLowerCase();
+            const label = currency === 'USD' ? 'per month' : 'per year';
+
+            // Greeting check
+            if (q.match(/^(hi|hello|hey|hii|hiii|good morning|good afternoon|good evening|greetings)[\s!?]*$/)) {
+                return `Hi! 👋 I'm the Uplers' 2026 Salary Guide assistant. Ask me about engineering salaries in India, hiring best practices, or the Indian hiring ecosystem. How can I help?`;
+            }
+
+            // 1. DIRECT ROLE CHECK (Relaxed Logic)
+            // We check for salary roles FIRST, regardless of "salary" keyword
+            const roles = ["full stack", "frontend", "backend", "data engineer", "devops", "data scientist", "product manager", "ux", "ui", "cybersecurity", "engineer", "architect", "sre", ".net", "dotnet", "ml ops", "mlops"];
+
+            // Special handling for "AI/ML" generic queries
+            if (q.includes("ai") || q.includes("ml") || q.includes("artificial intelligence")) {
+                const aiml = KNOWLEDGE_BASE.salaries.aiml.productCompany[currency];
+                return `**AI/ML Engineer Salaries (Product Companies):**\n\n• 3-5 years: ${aiml["3-5"]} ${label}\n• 5-7 years: ${aiml["5-7"]} ${label}\n• 7+ years: ${aiml["7+"]} ${label}`;
+            }
+
+            for (const r of roles) {
+                if (q.includes(r)) {
+                    const res = findSalary(r, currency);
+                    if (res) return `**${res.role.toUpperCase()} Salaries:**\n\n• 3-5 years: ${res.salaries["3-5"]} ${label}\n• 5-8 years: ${res.salaries["5-8"]} ${label}\n• 8+ years: ${res.salaries["8+"]} ${label}`;
+                }
+            }
+
+            // 2. Intent Checks
+            if (q.includes("uplers") || q.includes("who are you")) {
+                return `**About Uplers:** We help global companies hire top product talent from India. <a href="${MEETING_LINK}" target="_blank">Schedule a 30-min call</a> to learn more.`;
+            }
+
+            // Fallback
+            return `I'm sorry, I don't have information about that topic in my current knowledge base. I'm specifically trained on the Uplers India Salary Guide 2026, which covers:\n\n• Salary ranges for top 20 engineering roles in India\n• Hiring ecosystem insights\n• Interview frameworks and best practices and a lot more\n\nYou can download the salary guide here - <a href="${SALARY_GUIDE_LINK}" target="_blank">You can download the salary guide here</a>\n\nIf you have any other questions or feedback on what we can do better, our team would be happy to help.\n\n<a href="${MEETING_LINK}" target="_blank">Book a call with us now</a>`;
+        }
+
+        function addBotMessage(text) {
+            const container = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = 'message bot';
+            div.innerHTML = `<div class="message-content">${formatText(text)}</div>`;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function addUserMessage(text) {
+            const container = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = 'message user';
+            div.innerHTML = `<div class="message-content">${text}</div>`;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function formatText(text) {
+            return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            addUserMessage(msg);
+            input.value = '';
+            document.getElementById('sendBtn').disabled = true;
+
+            // Ensure messages area is visible if it was hidden (though it's active by default now)
+
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                const resp = generateResponse(msg, currentCurrency);
+                addBotMessage(resp);
+            }, 1500);
+        }
+
+        function showTyping() {
+            const container = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.id = 'typingIndicator';
+            div.className = 'typing-container';
+            div.innerHTML = `<span class="typing-label">Typing</span><div class="typing-dots"><span></span><span></span><span></span></div>`;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function hideTyping() {
+            const el = document.getElementById('typingIndicator');
+            if (el) el.remove();
+        }
+
+        function sendQuickQuestion(q) {
+            document.getElementById('chatInput').value = q;
+            sendMessage();
+        }
+
+        function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
+
+        document.getElementById('chatInput').addEventListener('input', function () {
+            document.getElementById('sendBtn').disabled = !this.value.trim();
+        });
+    </script>
+</body>
+
+</html>
