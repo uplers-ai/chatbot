@@ -283,41 +283,61 @@
             z-index: 1000;
         }
 
-        .chat-button {
-            background: #1a1a1a;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 16px 24px;
-            cursor: pointer;
+        /* Floating Search Bar */
+        .floating-search-wrapper {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            background: white;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            padding: 8px 10px;
+            transition: all 0.3s ease;
+            width: 320px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
         }
 
-        .chat-button .pulse {
-            width: 10px;
-            height: 10px;
-            background: #FFD93D;
+        .floating-search-wrapper:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            border-color: #FFD93D;
+        }
+
+        .floating-search-wrapper.hidden {
+            display: none;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .floating-icon {
+            width: 42px;
+            height: 42px;
+            background: #1a1a1a;
             border-radius: 50%;
-            animation: pulse 2s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFD93D;
+            flex-shrink: 0;
+            cursor: pointer;
         }
 
-        @keyframes pulse {
+        .floating-input {
+            border: none;
+            background: transparent;
+            padding: 0 15px;
+            font-size: 14px;
+            flex: 1;
+            outline: none;
+            color: #1a1a1a;
+            font-family: 'Inter', sans-serif;
+        }
 
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.7;
-                transform: scale(1.2);
-            }
+        .floating-input::placeholder {
+            color: #888;
         }
 
         .chat-window {
@@ -522,55 +542,6 @@
             40% {
                 transform: translateY(-8px);
             }
-        }
-
-        /* Currency Selector */
-        .currency-selector {
-            padding: 20px;
-            background: #f8f9fa;
-            text-align: center;
-        }
-
-        .currency-selector p {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 12px;
-            font-weight: 500;
-        }
-
-        .currency-btns {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        .currency-btn {
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 14px 28px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .currency-btn:hover {
-            border-color: #FFD93D;
-            background: #FFFEF5;
-        }
-
-        .currency-btn.selected {
-            border-color: #FFD93D;
-            background: #FFD93D;
-        }
-
-        .currency-flag {
-            font-size: 20px;
         }
 
         .quick-questions {
@@ -790,15 +761,18 @@
     </footer>
 
     <div class="chat-widget">
-        <button class="chat-button" id="chatButton" onclick="toggleChat()">
-            <div class="pulse"></div>
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-            </svg>
-            Ask about salaries
-        </button>
+        <!-- Floating Search Input -->
+        <div class="floating-search-wrapper" id="floatingSearch">
+            <div class="floating-icon" onclick="toggleChat()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+            <input type="text" class="floating-input" id="floatingInput" placeholder="Ask anything..."
+                onkeypress="handleFloatingEnter(event)">
+        </div>
 
         <div class="chat-window" id="chatWindow">
             <div class="chat-header">
@@ -806,7 +780,7 @@
                     <div class="chat-avatar">U</div>
                     <div class="chat-title">
                         <h3>Salary Guide Assistant</h3>
-                        <p>Ask me anything about tech salaries</p>
+                        <p>India 2026 Edition</p>
                     </div>
                 </div>
                 <button class="close-btn" onclick="toggleChat()"><svg xmlns="http://www.w3.org/2000/svg" width="22"
@@ -817,34 +791,24 @@
             </div>
 
             <div class="chat-messages" id="chatMessages">
-                <div class="message bot">
-                    <div class="message-content">Hi! 👋 I'm the Uplers Salary Guide assistant. Before we start, please
-                        select your preferred currency:</div>
-                </div>
+                <!-- Messages will be added here -->
             </div>
 
-            <div class="currency-selector" id="currencySelector">
-                <p>Choose your preferred currency:</p>
-                <div class="currency-btns">
-                    <button class="currency-btn" onclick="selectCurrency('USD')"><span class="currency-flag">🇺🇸</span>
-                        USD (Monthly)</button>
-                    <button class="currency-btn" onclick="selectCurrency('INR')"><span class="currency-flag">🇮🇳</span>
-                        INR (Annual)</button>
-                </div>
-            </div>
-
-            <div class="quick-questions" id="quickQuestions" style="display: none;">
+            <div class="quick-questions" id="quickQuestions">
                 <p>Popular questions:</p>
                 <div class="quick-btns">
                     <button class="quick-btn" onclick="sendQuickQuestion('Full Stack Engineer salary')">Full Stack
-                        salary</button>
-                    <button class="quick-btn" onclick="sendQuickQuestion('AI/ML Engineer pay')">AI/ML Engineer</button>
-                    <button class="quick-btn" onclick="sendQuickQuestion('Interview process')">Interview tips</button>
-                    <button class="quick-btn" onclick="sendQuickQuestion('Hiring blind spots')">Hiring mistakes</button>
+                        Engineer salary</button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('AI/ML Engineer pay')">AI/ML Engineer
+                        pay</button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('Interview process')">Interview
+                        process</button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('Hiring blind spots')">Hiring blind
+                        spots</button>
                 </div>
             </div>
 
-            <div class="chat-input-area" id="chatInputArea" style="display: none;">
+            <div class="chat-input-area" id="chatInputArea">
                 <input type="text" class="chat-input" id="chatInput" placeholder="Type your question..."
                     onkeypress="handleKeyPress(event)">
                 <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled><svg
@@ -912,47 +876,26 @@
         };
 
         // Auto-detect currency based on timezone
-        function detectAndSetDefaultCurrency() {
+        function detectAndSetCurrency() {
             try {
                 const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
                 const isIndia = timeZone && (
-                    timeZone === 'Asia/Kolkata' || 
+                    timeZone === 'Asia/Kolkata' ||
                     timeZone === 'Asia/Calcutta' ||
                     timeZone.includes('Kolkata') ||
                     timeZone.includes('Calcutta')
                 );
-                
-                const detectedCurrency = isIndia ? 'INR' : 'USD';
-                console.log('Detected timezone:', timeZone, '→ Currency:', detectedCurrency);
-                
-                // Pre-select the detected currency button
-                document.querySelectorAll('.currency-btn').forEach(btn => {
-                    if (btn.textContent.includes(detectedCurrency)) {
-                        btn.classList.add('selected');
-                        btn.style.borderColor = '#FFD93D';
-                        btn.style.background = '#FFD93D';
-                    }
-                });
+
+                selectedCurrency = isIndia ? 'INR' : 'USD';
+                console.log('Detected timezone:', timeZone, '→ Currency:', selectedCurrency);
             } catch (e) {
-                console.log('Timezone detection failed, user will select manually');
+                selectedCurrency = 'USD'; // Default to USD if detection fails
+                console.log('Timezone detection failed, defaulting to USD');
             }
         }
 
-        function selectCurrency(currency) {
-            selectedCurrency = currency;
-            document.querySelectorAll('.currency-btn').forEach(btn => btn.classList.remove('selected'));
-            event.target.closest('.currency-btn').classList.add('selected');
-
-            setTimeout(() => {
-                document.getElementById('currencySelector').style.display = 'none';
-                document.getElementById('quickQuestions').style.display = 'block';
-                document.getElementById('chatInputArea').style.display = 'flex';
-
-                const periodLabel = currency === 'USD' ? 'monthly' : 'annual';
-                addMessage(`Great! I'll show all salaries in **${currency}** (${periodLabel} rates). Ask me about:\n\n• Salary ranges for 20+ tech roles\n• AI/ML Engineer compensation\n• Interview frameworks\n• Hiring best practices\n\nWhat would you like to know?`, 'bot');
-                document.getElementById('chatInput').focus();
-            }, 300);
-        }
+        // Auto-detect currency on page load
+        detectAndSetCurrency();
 
         function findSalary(role) {
             const normalizedRole = role.toLowerCase().trim();
@@ -979,10 +922,13 @@
             let wasAnswered = true;
             const salaryLabel = getSalaryLabel();
 
+            // 1. GREETINGS
             if (q.match(/^(hi|hello|hey|hii|hiii|good morning|good afternoon|good evening|greetings)[\s!?]*$/)) {
-                response = `Hi! 👋 I'm the Uplers' 2026 Salary Guide assistant. Ask me about engineering salaries in India, hiring best practices, or the Indian hiring ecosystem. How can I help?`;
+                return { response: `Hi! 👋 I'm the Uplers' 2026 Salary Guide assistant. Ask me about engineering salaries in India, hiring best practices, or the Indian hiring ecosystem. How can I help?`, wasAnswered: true };
             }
-            else if (q.includes("ai") || q.includes("ml") || q.includes("machine learning") || q.includes("artificial intelligence")) {
+
+            // 2. AI/ML SPECIFIC (Direct Check)
+            if (q.includes("ai") || q.includes("ml") || q.includes("machine learning") || q.includes("artificial intelligence")) {
                 const aiml = SALARIES.aiml;
                 if (q.includes("iit") || q.includes("bits") || q.includes("iim") || q.includes("top tier") || q.includes("premium")) {
                     const s = aiml.topTier[selectedCurrency];
@@ -992,93 +938,34 @@
                     const top = aiml.topTier[selectedCurrency];
                     response = `**AI/ML Engineer Salaries:**\n\n**Product Company Experience:**\n• 3-5 years: ${prod["3-5"]} ${salaryLabel}\n• 5-7 years: ${prod["5-7"]} ${salaryLabel}\n• 7+ years: ${prod["7+"]} ${salaryLabel}\n\n**Top-tier Pedigree (IITs, BITS, IIMs):**\n• 3-5 years: ${top["3-5"]} ${salaryLabel}\n• 5-7 years: ${top["5-7"]} ${salaryLabel}\n• 7+ years: ${top["7+"]} ${salaryLabel}\n\nAI/ML hires through Uplers grew by **260%** between 2023-2025.`;
                 }
+                return { response, wasAnswered };
             }
-            else if (q.includes("salary") || q.includes("pay") || q.includes("compensation") || q.includes("ctc") || q.includes("package") || q.includes("earn")) {
-                const roles = ["full stack", "fullstack", "frontend", "backend", "data engineer", "devops", "cloud", "mobile", "flutter", "react native", "product engineer", "python", "data scientist", "cybersecurity", "platform", "mlops", "ml ops", "solutions architect", "qa", "sre", ".net", "dotnet", "product manager", "ux", "ui", "designer", "growth", "customer success"];
-                let found = false;
-                for (const role of roles) {
-                    if (q.includes(role)) {
-                        const result = findSalary(role);
-                        if (result) {
-                            response = `**${result.role.charAt(0).toUpperCase() + result.role.slice(1)} Salaries (${result.category}):**\n\n• 3-5 years: ${result.salaries["3-5"]} ${salaryLabel}\n• 5-8 years: ${result.salaries["5-8"]} ${salaryLabel}\n• 8+ years: ${result.salaries["8+"]} ${salaryLabel}\n\nThese are for product companies/startups in India (2026).`;
-                            found = true;
-                            break;
-                        }
+
+            // 3. RELAXED ROLE CHECK (Directly check for roles even without "salary" keyword)
+            const roles = ["full stack", "fullstack", "frontend", "backend", "data engineer", "devops", "cloud", "mobile", "flutter", "react native", "product engineer", "python", "data scientist", "cybersecurity", "platform", "mlops", "ml ops", "solutions architect", "qa", "sre", ".net", "dotnet", "product manager", "ux", "ui", "designer", "growth", "customer success"];
+            for (const role of roles) {
+                if (q.includes(role)) {
+                    const result = findSalary(role);
+                    if (result) {
+                        response = `**${result.role.charAt(0).toUpperCase() + result.role.slice(1)} Salaries (${result.category}):**\n\n• 3-5 years: ${result.salaries["3-5"]} ${salaryLabel}\n• 5-8 years: ${result.salaries["5-8"]} ${salaryLabel}\n• 8+ years: ${result.salaries["8+"]} ${label || salaryLabel}\n\nThese are for product companies/startups in India (2026).`;
+                        return { response, wasAnswered };
                     }
                 }
-                if (!found) {
-                    const sample = selectedCurrency === 'USD' ? '$4,000+' : '40 Lakhs+';
-                    response = `I have salary data for 20+ roles. Some highlights (8+ years):\n\n**Engineering:** Full Stack/Backend: ${sample} ${salaryLabel}\n**Data Scientist:** ${selectedCurrency === 'USD' ? '$4,500+' : '45 Lakhs+'} ${salaryLabel}\n\nAsk about a specific role for detailed breakdown.`;
-                }
+            }
+
+            // 4. GENERAL TOPICS
+            if (q.includes("interview") || q.includes("hiring process")) {
+                response = `**4-Step Interview Framework:**\n\n**1. Initial Screening** (20-30 min)\nGauge basics: skill, mindset, culture, ambition\n\n**2. Technical Assessment** (2-4 hrs)\nProblem solving, coding, architecture\n\n**3. Cultural Round** (45-60 min)\nProduct mindset, ownership, team-fit\n\n**4. Final Discussion** (20-30 min)\nRole expectations, compensation, next steps\n\n**Avoid:** Starting with AI assessments before human interaction, slow feedback loops.`;
+            }
+            else if (q.includes("blind spot") || q.includes("mistake") || q.includes("avoid") || q.includes("hiring tip")) {
+                response = `**5 Hiring Blind Spots:**\n\n**1. Elaborate Interview Process**\n6-round processes cause dropouts. Use lean 4-step process.\n\n**2. Experience Gap in Screening**\nJunior recruiters create friction with seniors. Use senior recruiters.\n\n**3. Mismatched Budget Benchmarking**\nBenchmark against product companies, not average salaries.\n\n**4. Talent Background Misalignment**\nService background ≠ product mindset. Hire from product companies.\n\n**5. Backouts**\n60-90 day notice periods cause issues. Target 30-day joiners.`;
+            }
+            else if (q.includes("uplers") || q.includes("who are you")) {
+                response = `**About Uplers:** We help global companies hire top product talent from India. <a href="${MEETING_LINK}" target="_blank">Schedule a 30-min call</a> to learn more.`;
             }
             else {
-                const roleKeywords = [
-                    { terms: ["full stack", "fullstack"], role: "full stack engineer" },
-                    { terms: ["frontend", "front end"], role: "frontend engineer" },
-                    { terms: ["backend", "back end"], role: "backend engineer" },
-                    { terms: ["data engineer"], role: "data engineer" },
-                    { terms: ["devops", "cloud engineer"], role: "cloud/devops engineer" },
-                    { terms: ["mobile", "flutter", "react native"], role: "mobile engineer" },
-                    { terms: ["python engineer", "python developer"], role: "python engineer" },
-                    { terms: ["data scientist"], role: "data scientist" },
-                    { terms: ["product manager", "pm role"], role: "product manager" },
-                    { terms: ["ux designer", "ui designer", "product designer"], role: "product/ux designer" },
-                    { terms: ["qa", "automation engineer", "test engineer"], role: "qa automation engineer" },
-                    { terms: ["sre", "site reliability"], role: "site reliability engineer" },
-                    { terms: [".net", "dotnet"], role: ".net engineer" },
-                    { terms: ["cybersecurity", "security engineer"], role: "cybersecurity engineer" },
-                    { terms: ["platform engineer"], role: "platform engineer" },
-                    { terms: ["mlops", "ml ops"], role: "ml ops engineer" },
-                    { terms: ["solutions architect"], role: "solutions architect" },
-                    { terms: ["growth marketer"], role: "growth marketer" },
-                    { terms: ["customer success"], role: "customer success" }
-                ];
-
-                let roleFound = false;
-                for (const { terms, role } of roleKeywords) {
-                    if (terms.some(term => q.includes(term))) {
-                        const result = findSalary(role);
-                        if (result) {
-                            response = `**${result.role.charAt(0).toUpperCase() + result.role.slice(1)} Salaries:**\n\n• 3-5 years: ${result.salaries["3-5"]} ${salaryLabel}\n• 5-8 years: ${result.salaries["5-8"]} ${salaryLabel}\n• 8+ years: ${result.salaries["8+"]} ${salaryLabel}`;
-                            roleFound = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (!roleFound) {
-                    if (q.includes("interview") || q.includes("hiring process")) {
-                        response = `**4-Step Interview Framework:**\n\n**1. Initial Screening** (20-30 min)\nGauge basics: skill, mindset, culture, ambition\n\n**2. Technical Assessment** (2-4 hrs)\nProblem solving, coding, architecture\n\n**3. Cultural Round** (45-60 min)\nProduct mindset, ownership, team-fit\n\n**4. Final Discussion** (20-30 min)\nRole expectations, compensation, next steps\n\n**Avoid:** Starting with AI assessments before human interaction, slow feedback loops.`;
-                    }
-                    else if (q.includes("blind spot") || q.includes("mistake") || q.includes("avoid") || q.includes("hiring tip")) {
-                        response = `**5 Hiring Blind Spots:**\n\n**1. Elaborate Interview Process**\n6-round processes cause dropouts. Use lean 4-step process.\n\n**2. Experience Gap in Screening**\nJunior recruiters create friction with seniors. Use senior recruiters.\n\n**3. Mismatched Budget Benchmarking**\nBenchmark against product companies, not average salaries.\n\n**4. Talent Background Misalignment**\nService background ≠ product mindset. Hire from product companies.\n\n**5. Backouts**\n60-90 day notice periods cause issues. Target 30-day joiners.`;
-                    }
-                    else if (q.includes("backout") || q.includes("notice period")) {
-                        response = `**Handling Backouts in India:**\n\nBackouts are common due to 60-90 day notice periods.\n\n**Solutions:**\n• Target 30-day or immediate joiners\n• Keep backup candidates\n• Stay connected during notice period\n\nWant to discuss your hiring strategy? <a href="${MEETING_LINK}" target="_blank">Schedule a call with us</a>`;
-                    }
-                    else if (q.includes("service") || q.includes("product ecosystem") || q.includes("product vs service")) {
-                        response = `**India's Two Tech Ecosystems:**\n\n**Service Ecosystem** (traditional)\n• Purpose: Deliver what client asks\n• Mindset: Execution\n• Salary: Lower\n\n**Product Ecosystem** (growing)\n• Purpose: Build what users need\n• Mindset: Ownership\n• Salary: Higher\n\n**Key insight:** Hire from product background for startup roles.`;
-                    }
-                    else if (q.includes("gic") || q.includes("innovation center")) {
-                        response = `**Global Innovation Centers (GICs) in India:**\n\n• Total GICs: ${STATS.gics}\n• Employees: ${STATS.gicEmployees}\n• Revenue: ${STATS.gicRevenue}\n\n**Top cities for GICs (2026):**\n1. Bengaluru\n2. Hyderabad\n3. Gurgaon`;
-                    }
-                    else if (q.includes("india") || q.includes("startup") || q.includes("stat") || q.includes("market")) {
-                        response = `**India Startup Ecosystem (2026):**\n\n• Startups: ${STATS.totalStartups}\n• Unicorns: ${STATS.unicorns}\n• Growth rate: ${STATS.ecosystemGrowth}\n• GICs: ${STATS.gics}\n• Professionals with startup experience: ${STATS.startupProfessionals}\n\n**Top hired roles 2025:** AI/ML, Fullstack, Backend\n**Top sectors:** AI native, FinTech, HealthTech`;
-                    }
-                    else if (q.includes("top role") || q.includes("most hired") || q.includes("in demand")) {
-                        response = `**Top 3 Hired Roles in 2025:**\n\n1. AI/ML Engineer\n2. Fullstack Engineer\n3. Backend Engineer\n\n**Top Hiring Sectors:**\n1. AI native companies\n2. FinTech\n3. HealthTech`;
-                    }
-                    else if (q.includes("uplers") || q.includes("who are you") || q.includes("about you")) {
-                        response = `**About Uplers:**\n\nWe help companies hire product-first talent from India.\n\n• ${STATS.uplersClients} companies hired through Uplers\n• Clients: BrowserStack, GitLab, Airbnb, Tripadvisor\n\nWant to learn more? <a href="${MEETING_LINK}" target="_blank">Schedule a 30-min call</a>`;
-                    }
-                    else if (q.includes("help") || q.includes("what can you")) {
-                        response = `I can help with:\n\n• **Salary ranges** for 20+ tech roles (${selectedCurrency})\n• **AI/ML salaries** by pedigree\n• **Interview framework**\n• **Hiring blind spots**\n• **India startup stats**\n\nJust ask a question!`;
-                    }
-                    else {
-                        response = `I'm sorry, I don't have information about that topic in my current knowledge base. I'm specifically trained on the Uplers India Salary Guide 2026, which covers:\n\n• Salary ranges for top 20 engineering roles in India\n• Hiring ecosystem insights\n• Interview frameworks and best practices\n....and a lot more\n\nYou can download the salary guide here - <a href="${SALARY_GUIDE_LINK}" target="_blank">Download Salary Guide</a>\n\nIf you have any other questions or feedback on what we can do better, our team would be happy to help.\n\n<a href="${MEETING_LINK}" target="_blank">Book a call with us now</a>`;
-                        wasAnswered = false;
-                    }
-                }
+                response = `I don't have that specific data. I'm specifically trained on the **India Salary Guide 2026**. \n\n👉 <a href="${MEETING_LINK}" target="_blank">**Schedule a 30-min call with Uplers**</a> for expert advice!`;
+                wasAnswered = false;
             }
 
             return { response, wasAnswered };
@@ -1091,15 +978,27 @@
         function toggleChat() {
             isOpen = !isOpen;
             const chatWindow = document.getElementById('chatWindow');
-            const chatButton = document.getElementById('chatButton');
+            const floatSearch = document.getElementById('floatingSearch');
+
             if (isOpen) {
                 chatWindow.classList.add('open');
-                chatButton.style.display = 'none';
-                // Auto-detect and pre-select currency when chat opens
-                detectAndSetDefaultCurrency();
+                floatSearch.classList.add('hidden');
+                document.getElementById('chatInput').focus();
             } else {
                 chatWindow.classList.remove('open');
-                chatButton.style.display = 'flex';
+                floatSearch.classList.remove('hidden');
+            }
+        }
+
+        function handleFloatingEnter(event) {
+            if (event.key === 'Enter') {
+                const val = event.target.value.trim();
+                if (val) {
+                    toggleChat(); // Open window
+                    document.getElementById('chatInput').value = val;
+                    sendMessage(); // Auto send
+                    event.target.value = '';
+                }
             }
         }
 
